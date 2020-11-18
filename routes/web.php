@@ -1,32 +1,22 @@
 <?php
 
-use App\Models\Poll;
+use App\Http\Controllers\PollsController;
+use App\Http\Controllers\PollVotesController;
+use App\Http\Controllers\PollResultsController;
 
-Route::get('/', function() {
-    return view('home');
-});
+Route::get('/', [PollsController::class, 'create'])->name('home');
 
-Route::post('/polls', function() {
-    $poll = new Poll;
+Route::get('/polls', [PollsController::class, 'index'])
+    ->name('polls.index');
 
-    $poll->question_text = request('question_text');
-    $poll->choice_1 = request('question_choice_1');
-    $poll->choice_2 = request('question_choice_2');
-    $poll->choice_3 = request('question_choice_3');
+Route::post('/polls', [PollsController::class, 'store'])
+    ->name('polls.store');
 
-    $poll->save();
+Route::get('/polls/{poll}', [PollsController::class, 'show'])
+    ->name('polls.show');
 
-    dd('Sondage créé avec succès!');
-});
+Route::post('/polls/{poll}/vote', PollVotesController::class)
+    ->name('polls.vote');
 
-Route::get('/polls/{id}', function($id) {
-    $poll = Poll::findOrFail($id);
-
-    return view('polls.show', compact('poll'));
-});
-
-Route::post('/polls/{id}/vote', function($id) {
-    $poll = Poll::findOrFail($id);
-
-    dd(request('choice'));
-});
+Route::get('/polls/{poll}/results', PollResultsController::class)
+    ->name('polls.results');
