@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poll #{{ $poll->id }} | Easy Polls</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
     <h1>Poll #{{ $poll->id }}</h1>
 
     <h2>{{ $poll->question_text }}</h2>
 
-    <form method="POST" action="/polls/{{ $poll->id }}/vote">
+    <form method="POST" action="{{ route('polls.vote', $poll) }}">
         @csrf
 
         <label for="choice_1">
@@ -29,5 +24,4 @@
             <button type="submit">Submit</button>
         </div>
     </form>
-</body>
-</html>
+@endsection

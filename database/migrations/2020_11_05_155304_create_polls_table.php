@@ -19,6 +19,9 @@ class CreatePollsTable extends Migration
             $table->string('choice_1');
             $table->string('choice_2');
             $table->string('choice_3');
+            $table->unsignedInteger('choice_1_votes')->default(0);
+            $table->unsignedInteger('choice_2_votes')->default(0);
+            $table->unsignedInteger('choice_3_votes')->default(0);
             $table->timestamps();
         });
     }

@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Easy Polls</title>
-</head>
-<body>
-    <h1>Easy Polls</h1>
+@extends('layouts.app')
 
-    <form method="POST" action="/polls">
+@section('content')
+    <form method="POST" action="{{ route('polls.store') }}">
         @csrf
 
         <div>
@@ -29,5 +22,4 @@
             <button type="submit" formnovalidate>Create Poll</button>
         </div>
     </form>
-</body>
-</html>
+@endsection
