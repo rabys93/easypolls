@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Choice;
 use App\Models\Poll;
+use Illuminate\Support\Facades\Validator;
 
 class PollsController extends Controller
 {
@@ -25,14 +27,16 @@ class PollsController extends Controller
 
     public function store()
     {
-        $poll = new Poll;
+        $poll = Poll::create(['question_text' => request('question_text')]);
 
-        $poll->question_text = request('question_text');
-        $poll->choice_1 = request('question_choice_1');
-        $poll->choice_2 = request('question_choice_2');
-        $poll->choice_3 = request('question_choice_3');
-
-        $poll->save();
+        if($poll){
+            for ($i = 1 ;$i < 4; $i++){
+                $poll->choices()->create([
+                    'name' => request('question_choice_'.$i),
+                    'poll_id'=>  $poll->id
+                ]);
+            }
+        }
 
         session()->flash('notification.success', 'Sondage créé avec succès!');
 
