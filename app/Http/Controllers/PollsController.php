@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Choice;
 use App\Models\Poll;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PollsController extends Controller
@@ -25,14 +26,23 @@ class PollsController extends Controller
         return view('polls.show', compact('poll'));
     }
 
-    public function store()
+    public $pollRules = [
+        'question_text' => 'required|max:255',
+        'question_choice_1' => 'required,',
+        'question_choice_2' => 'required',
+        'question_choice_3' => 'required',
+    ];
+
+    public function store(Request $request)
     {
-        $poll = Poll::create(['question_text' => request('question_text')]);
+        $validator = $request->validate($this->pollRules);
+
+        $poll = Poll::create(['question_text' => $request->get('question_text')]);
 
         if($poll){
             for ($i = 1 ;$i < 4; $i++){
                 $poll->choices()->create([
-                    'name' => request('question_choice_'.$i),
+                    'name' => $request->get('question_choice_'.$i),
                     'poll_id'=>  $poll->id
                 ]);
             }
